@@ -77,21 +77,33 @@ double** multiply_two_matrix_block(){
 int main(int argc, char** argv) {
     srand(time(NULL));
 
+    clock_t start_naive, end_naive, start_block, end_block;
+    double total_time_naive, total_time_block;
+
     // Rozmiar bloku K (a także N) powinien być parametrem przekazywanym programowi z wiersza polecenia.  
     int N = atoi(argv[1]);  
     int K = atoi(argv[2]);
 
     prepare_matrixs();
 
+    start_naive = clock(); 
     double** result_naive = multiply_two_matrix_naive();
+    end_naive= clock();
+
+    start_block = clock();
     double** result_blocks = multiply_two_matrix_block();
+    end_block = clock();
 
-    // clock_t start, end;
-    // double total_time;
+    int flops = 2 * N^3;
 
-    // start = clock();   
-    // end = clock();
-    // total_time = ((double)(end-start))/CLOCKS_PER_SEC;
-    // printf("Total time: %f\n", total_time);  
+    total_time_naive = ((double)(end_naive-start_naive))/CLOCKS_PER_SEC;
+    total_time_block = ((double)(end_block-start_block))/CLOCKS_PER_SEC;
+
+    printf("Flops: %f\n", flops);  
+    printf("Total time NAIVE: %f\n", total_time_naive);  
+    printf("GFLOP/s NAIVE: %f\n", flops/total_time_naive);  
+    printf("Total time BLOCK: %f\n", total_time_block); 
+    printf("GFLOP/s BLOCK: %f\n", flops/total_time_block); 
+
     return 0;
 }
